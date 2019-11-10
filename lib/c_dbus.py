@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
+
 """
 DBus related functionality including the DBus interface and utility 
 functions

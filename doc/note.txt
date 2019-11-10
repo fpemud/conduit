@@ -1,0 +1,124 @@
+conduit is a synchronization center.
+
+conduit can be run in 3 ways:
+1. used by upper layer applications (through dbus)
+2. used by timer (through conduit daemon)
+3. used by peer (through conduit daemon)
+
+conduit API should only register to Session Bus.
+the main part of conduit is in user process, not in daemon.
+
+
+Host
+------------------------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator <-> DataOperator
+------------------------------
+
+Host
+------------------------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator -> DataOperator
+------------------------------
+
+Host
+------------------------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator <- DataOperator
+------------------------------
+
+Host1         Host2
+----------    ---------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator <-> DataOperator
+------------------------------
+
+Host1         Host2
+----------    ---------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator -> DataOperator
+------------------------------
+
+Host1         Host2
+----------    ---------------
+Data               Data
+  ^                 ^
+  |                 |
+DataOperator <- DataOperator
+------------------------------
+
+Host
+----------    
+Data          
+  ^           
+  |            
+DataOperator <-> External Entity
+------------
+
+Host
+----------    
+Data          
+  ^           
+  |            
+DataOperator -> External Entity
+------------
+
+Host
+----------    
+Data          
+  ^           
+  |            
+DataOperator <- External Entity
+------------
+
+
+DataOperator: extensible
+
+
+
+
+Data Type:
+1. File
+2. BrowserBootmark
+3. Dir
+4. 
+x. custom defined Data Type
+
+
+
+
+
+DataProviders:
+t1. source, active
+t2. source, passive
+t3. sink, active
+t4. sink, passive
+t5. two-way, active
+t6. two-way, passsive
+
+sync-set:
+1. one t1, sink is not here         ->
+2. one t2, source is not here       ->
+3. one t3, source is not here       <-
+4. one t4, sink is not here         <-
+5. t1 + t3                          ->
+6. t2 + t4                          <-
+7. t1 + t3
+
+
+
+daemon is used to:
+1. accept control message from peer, start user conduit process to do things
+2. advertise to mdns
+3. accept callback from cloud, if needed
+4. do upnp to open port for cloud-callback
