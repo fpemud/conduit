@@ -1,0 +1,13 @@
+[Unit]
+Description=Conduit Daemon
+After=network.target
+
+[Service]
+Type=simple
+PIDFile=/run/conduit/conduit-daemon.pid
+ExecStart=/usr/sbin/conduit-daemon
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
