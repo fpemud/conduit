@@ -7,18 +7,21 @@ clean:
 
 install:
 	install -d -m 0755 "$(DESTDIR)/$(prefix)/sbin"
-	install -m 0755 syncupd "$(DESTDIR)/$(prefix)/sbin"
-	install -m 0755 syncupctl "$(DESTDIR)/$(prefix)/sbin"
+	install -m 0755 conduit-daemon "$(DESTDIR)/$(prefix)/sbin"
+	# install -d -m 0755 "$(DESTDIR)/$(prefix)/bin"
+	# install -m 0755 conduit "$(DESTDIR)/$(prefix)/bin"
 
-	install -d -m 0755 "$(DESTDIR)/$(prefix)/lib64/syncupd"
-	cp -r lib/* "$(DESTDIR)/$(prefix)/lib64/syncupd"
-	find "$(DESTDIR)/$(prefix)/lib64/syncupd" -type f | xargs chmod 644
-	find "$(DESTDIR)/$(prefix)/lib64/syncupd" -type d | xargs chmod 755
+	install -d -m 0755 "$(DESTDIR)/$(prefix)/lib64/conduit-daemon"
+	cp -r lib/* "$(DESTDIR)/$(prefix)/lib64/conduit-daemon"
+	find "$(DESTDIR)/$(prefix)/lib64/conduit-daemon" -type f | xargs chmod 644
+	find "$(DESTDIR)/$(prefix)/lib64/conduit-daemon" -type d | xargs chmod 755
 
 	install -d -m 0755 "$(DESTDIR)/$(prefix)/lib/systemd/system"
-	install -m 0644 data/syncupd.service "$(DESTDIR)/$(prefix)/lib/systemd/system"
+	install -m 0644 systemd/conduit-daemon.service "$(DESTDIR)/$(prefix)/lib/systemd/system"
 
 uninstall:
-	rm -Rf "$(DESTDIR)/$(prefix)/lib64/syncupd"
+	rm -f "$(DESTDIR)/$(prefix)/sbin/conduit-daemon"
+	rm -Rf "$(DESTDIR)/$(prefix)/lib64/conduit-daemon"
+	rm -f "$(DESTDIR)/$(prefix)/lib/systemd/system/conduit-daemon.service"
 
 .PHONY: all clean install uninstall
