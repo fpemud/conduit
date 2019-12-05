@@ -8,21 +8,6 @@ conduit can be run in 3 ways:
 conduit API should only register to Session Bus.
 the main part of conduit is in user process, not in daemon.
 
-<<<<<<< HEAD
-left side --- right side      (sides are swappable)
-   local  -->  local      
-   local  <--  local      
-   local  <->  local      
- conduit  -->  peer-conduit
- conduit  <--  peer-conduit
- conduit  <->  peer-conduit
- conduit  -->  external
- conduit  <--  external
- conduit  <->  external
-external  -->  external
-external  <--  external
-external  <->  external
-=======
 we claim to do realtime synchronization
 
 cfg status:
@@ -118,7 +103,6 @@ external(left,controllable,interactive) <-> external(right)
 external(left,controllable,non-interactive) <-> external(right)
   left pull
   left push
->>>>>>> 467aba3127a55cfe9b57b94121a965abe60732d8
 
 
 
