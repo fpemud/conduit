@@ -8,112 +8,46 @@ conduit can be run in 3 ways:
 conduit API should only register to Session Bus.
 the main part of conduit is in user process, not in daemon.
 
-
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <-> DataOperator
-------------------------------
-
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator -> DataOperator
-------------------------------
-
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <- DataOperator
-------------------------------
-
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <-> DataOperator
-------------------------------
-
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator -> DataOperator
-------------------------------
-
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <- DataOperator
-------------------------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator <-> External Entity
-------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator -> External Entity
-------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator <- External Entity
-------------
-
-
-DataOperator: extensible
+left side --- right side      (sides are swappable)
+   local  -->  local      
+   local  <--  local      
+   local  <->  local      
+ conduit  -->  peer-conduit
+ conduit  <--  peer-conduit
+ conduit  <->  peer-conduit
+ conduit  -->  external
+ conduit  <--  external
+ conduit  <->  external
+external  -->  external
+external  <--  external
+external  <->  external
 
 
 
 
 Data Type:
 1. File
-2. BrowserBootmark
-3. Dir
-4. 
+2. Directory
+3. BrowserBookmark
+4. element-cd-album: may be transcoded and tailored when sync
+5. element-movie: same as above
+6. element-tvshow: same as above
+7. 
 x. custom defined Data Type
 
 
+DataOperator Type:
+1. source-rsync-local: Dir, Source, Active, 
 
 
 
-DataProviders:
-t1. source, active
-t2. source, passive
-t3. sink, active
-t4. sink, passive
-t5. two-way, active
-t6. two-way, passsive
+What to sync:
+1. /home
+2. /var/lib/portage/overlay-fpemud-private
+3. /var/lib/portage/distfiles-private
+4. elements
 
-sync-set:
-1. one t1, sink is not here         ->
-2. one t2, source is not here       ->
-3. one t3, source is not here       <-
-4. one t4, sink is not here         <-
-5. t1 + t3                          ->
-6. t2 + t4                          <-
-7. t1 + t3
+
 
 
 
