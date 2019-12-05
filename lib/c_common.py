@@ -9,6 +9,12 @@ from c_util import CUtil
 from c_param import CConst
 
 
+class CDataInterfaceFile:
+    pass
+
+
+
+
 class CProtocolException(Exception):
     pass
 

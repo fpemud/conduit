@@ -1,0 +1,30 @@
+# common interface for Data
+class Data:
+
+    @read
+    def get_mtime(self):
+        pass
+
+    @write
+    def set_mtime(self):
+        pass
+
+# interface for Data if the data is text string
+class DataText:
+        pass
+
+# interface for Data if the data is binary blob
+class DataBinary:
+        pass
+
+# interface for Data if the data is a file
+class DataFile:
+        pass
+
+# interface for Data if the data is a directory
+class DataDirectory:
+        pass
+
+# interface for Data if the data is 
+class DataContainer:
+    pass

@@ -8,81 +8,101 @@ conduit can be run in 3 ways:
 conduit API should only register to Session Bus.
 the main part of conduit is in user process, not in daemon.
 
+we claim to do realtime synchronization
 
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <-> DataOperator
-------------------------------
+cfg status:
+1. green: cfg is valid, peer is online
+2. yellow: cfg is valid, peer is offline
+3. red: cfg is not synchronized with peer
 
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator -> DataOperator
-------------------------------
+operations:
+push: send my data to target, merge to target, fails if there's conflict
+pull: fetch from target, merge to mine, fails if there's conflict
+pull(accept-conflict): fetch from target, merge to mine, record conflict and tells the user
+copy-to: ...
+copy-from: ...
 
-Host
-------------------------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <- DataOperator
-------------------------------
+pre/post-operations:
+accept-push:
+stop-accept-push:
+accept-pull:
+stop-accept-pull:
+accept-copy-to:
+stop-accept-copy-to:
+accept-copy-from:
+stop-accept-copy-from:
 
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <-> DataOperator
-------------------------------
-
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator -> DataOperator
-------------------------------
-
-Host1         Host2
-----------    ---------------
-Data               Data
-  ^                 ^
-  |                 |
-DataOperator <- DataOperator
-------------------------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator <-> External Entity
-------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator -> External Entity
-------------
-
-Host
-----------    
-Data          
-  ^           
-  |            
-DataOperator <- External Entity
-------------
+not-through-conduit
+through-conduit
 
 
-DataOperator: extensible
+
+local(left) --> local(right):
+  right copy-from
+
+local(left) <-- local(right):
+  left copy-from
+
+local(left,interactive) <-> local(right,interactive):
+  left pull(accept-conflict)
+  right pull(accept-conflict)
+
+local(left,non-interactive) <-> local(right,non-interactive)
+  left pull
+  right pull
+
+
+conduit(left) --> conduit-peer(right)
+  right copy-from
+
+conduit(left) <-- conduit-peer(right)
+  left copy-from
+
+conduit(left,interactive) <-> conduit-peer(right,interactive)
+  left pull(accept-conflict)
+  right pull(accept-conflict), there should be no conflict
+
+conduit(left,non-interactive) <-> conduit-peer(right,non-interactive)
+  left pull
+  right pull
+
+conduit(left,interactive) <-> conduit-peer(right,non-interactive)
+  left pull(accept-conflict)
+  right pull
+
+conduit(left,non-interactive) <-> conduit-peer(right,interactive)
+  left pull
+  right pull(accept-conflict)
+
+
+conduit(left) --> external(right)
+  left copy-to
+
+conduit(left) <-- external(right)
+  left copy-from
+
+conduit(left,interactive) <-> external(right)
+  left pull(accept-conflict)
+  left push
+
+conduit(left,non-interactive) <-> external(right)
+  left pull
+  left push
+
+
+external(left,controllable) --> external(right)
+  left copy-to
+
+external(left,controllable) <-- external(right)
+  left copy-from
+
+external(left,controllable,interactive) <-> external(right)
+  left pull(accept-conflict)
+  left push
+
+external(left,controllable,non-interactive) <-> external(right)
+  left pull
+  left push
 
 
 
