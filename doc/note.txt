@@ -261,3 +261,21 @@ daemon is used to:
   ...
 
 <data-type>
+
+
+
+
+
+
+
+Data               Data
+ ^                  ^
+ |                  |
+Synchronizer  <->  Synchronizer
+
+Data
+ ^
+ |
+Synchronizer  <->  RemoteSynchronizer
+
+

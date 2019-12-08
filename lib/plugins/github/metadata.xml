@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin id="fpemud-refsystem">
-  <data-provider id="fpemud-refsystem">
+<plugin id="github">
+  <data-provider id="githubm">
     <filename>plugin.py</filename>
     <classname>DataProvider</classname>
     <roles>
         <source/>
         <sink/>
+        <twoway/>
     </roles>
-    <push-protocols>
+    <supported-protocols>
         <protocol>fpemud-refsystem-protocol</protocol>
-    </push-protocols>
-    <pull-protocols>
-        <protocol>fpemud-refsystem-protocol</protocol>
-    </pull-protocols>
+    </supported-protocols>
+    <match-peer>
+        <my-peer-id/>
+        <auto/>
+    </match-peer>
   </data-provider>
   <protocol id="fpemud-refsystem-protocol">
     <filename>plugin.py</filename>

@@ -2,7 +2,7 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 
-class ConduitProtocolRsync:
+class OutOfBandProtocolRsync:
 
     @staticmethod
     def get_id():

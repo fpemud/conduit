@@ -37,4 +37,4 @@ class CParam:
         self.dataProviderDict = dict()
         self.dataProviderFactoryDict = dict()
         self.dataTypeDict = dict()
-        self.protocolTypeDict = dict()
+        self.protocolDict = dict()
