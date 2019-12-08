@@ -47,6 +47,15 @@ class CDaemon:
                 CUtil.dumpCertAndKey(cert, key, self.param.certFile, self.param.privkeyFile)
                 logging.info('Certificate and private key generated.')
 
+            # load built-in data-types
+
+            # load built-in protocols
+            self.param.dataTypeDict[ConduitProtocolGit.get_id()] = ConduitProtocolGit
+            self.param.dataTypeDict[ConduitProtocolRsync.get_id()] = ConduitProtocolRsync
+
+
+
+
             # start control server
             self.ctrlServer = CCtrlServer(self.param)
             self.ctrlServer.start()

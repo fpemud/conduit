@@ -32,3 +32,9 @@ class CParam:
         self.ctrlPort = 2201
         self.pidFile = os.path.join(CConst.runDir, "conduit-daemon.pid")
         self.logLevel = None
+
+        self.pluginList = []
+        self.dataProviderDict = dict()
+        self.dataProviderFactoryDict = dict()
+        self.dataTypeDict = dict()
+        self.protocolTypeDict = dict()

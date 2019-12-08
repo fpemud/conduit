@@ -16,93 +16,180 @@ cfg status:
 3. red: cfg is not synchronized with peer
 
 operations:
-push: send my data to target, merge to target, fails if there's conflict
-pull: fetch from target, merge to mine, fails if there's conflict
-pull(accept-conflict): fetch from target, merge to mine, record conflict and tells the user
-copy-to: ...
-copy-from: ...
+* push-reject-conflict: send my data to target, merge to target, fails if there's conflict
+* push-report-conflict: send my data to target, merge to target, report conflict to the target's user
+* push-overwrite-conflict: copy from mine to target
+* pull-reject-conflict: fetch from target, merge to mine, fails if there's conflict
+* pull-report-conflict: fetch from target, merge to mine, report conflict to the user
+* pull-overwrite-conflict: copy from target to mine
 
-pre/post-operations:
-accept-push:
-stop-accept-push:
-accept-pull:
-stop-accept-pull:
-accept-copy-to:
-stop-accept-copy-to:
-accept-copy-from:
-stop-accept-copy-from:
+operations:
+* start-accept-push-reject-conflict:
+* start-accept-push-report-conflit:
+* start-accept-push-overwrite-conflict:
+* stop-accept-push:
+* start-accept-pull-reject-conflict:
+* start-accept-pull-report-conflict:
+* start-accept-pull-overwrite-conflict:
+* stop-accept-pull:
 
-not-through-conduit
-through-conduit
+operations:
+* register-auto-push
+* unregister-autoperationso-push
+* is-auto-push-registered
 
+property (in xml):
+* can-push
+* can-be-pushed-reject-conflict
+* can-be-pushed-report-conflict
+* can-be-pushed-overwrite-conflict
+* can-pull-reject-conflict
+* can-pull-report-conflict
+* can-pull-overwrite-conflict
+* can-be-pulled
+
+note:
+* generally, conflict should be processed by pull-client or push-server, but we reserve more flexibility
+
+note:
+* can-be-pushed-report-conflict is True => can-be-pushed-reject-conflict is True
+* can-be-pushed-reject-conflict is True => can-be-pushed-overwrite-conflict is True
+* can-pull-report-conflict is True => can-pull-reject-conflict is True
+* can-pull-reject-conflict is True => can-pull-overwrite-conflict is True
 
 
 local(left) --> local(right):
-  right copy-from
+    left.can_be_pulled() && right.can_pull_overwrite_conflict() =>
+        left.start_accept_pull_overwrite_conflict()
+        right.pull_overwrite_conflict()
+        left.stop_accept_pull()
+    )))
+    left.can_push_overwrite_conflict() && right.can_be_pushed() =>
+        right.start_accept_push_overwrite_conflict()
+        left.push_overwrite_conflict()
+        right.stop_accept_push()
 
 local(left) <-- local(right):
-  left copy-from
+    left.can_pull_overwrite_conflict() && right.can_be_pulled() =>
+        right.start_accept_pull_overwrite_conflict()
+        left.pull_overwrite_conflict()
+        right.stop_accept_pull()
+    )))
+    left.can_be_pushed() && right.can_push_overwrite_conflict() =>
+        left.start_accept_push_overwrite_conflict()
+        right.push_overwrite_conflict()
+        left.stop_accept_push()
 
-local(left,interactive) <-> local(right,interactive):
-  left pull(accept-conflict)
-  right pull(accept-conflict)
+local(left, interactive) <-> local(right, interactive):
+    # right-to-left
+    left.can_pull_accept_conflict() && right.can_be_pulled() =>
+        right.start_accept_pull_accept_conflict()
+        left.pull_accept_conflict()
+        right.stop_accept_pull()
+    )))
+    left.can_be_pushed() && right.can_push_accept_conflict() =>
+        left.start_accept_push_accept_conflict()
+        right.push_accept_conflict()
+        left.stop_accept_push()
+
+    # left-to-right
+    left.can_be_pulled() && right.can_pull_accept_conflict() =>
+        left.start_accept_pull_accept_conflict()
+        right.pull_accept_conflict()
+        left.stop_accept_pull()
+    )))
+    left.can_push_accept_conflict() && right.can_be_pushed() =>
+        right.start_accept_push_accept_conflict()
+        left.push_accept_conflict()
+        right.stop_accept_push()
 
 local(left,non-interactive) <-> local(right,non-interactive)
-  left pull
-  right pull
+    # right-to-left
+    left pull-reject-conflict ))) right push-reject-conflict
+    # left-to-right
+    right pull-reject-conflict ))) left push-reject-conflict
+
 
 
 conduit(left) --> conduit-peer(right)
-  right copy-from
+    right pull_overwrite_conflict ))) left push_overwrite_conflict
 
 conduit(left) <-- conduit-peer(right)
-  left copy-from
+    left pull_overwrite_conflict ))) right push_overwrite_conflict
 
 conduit(left,interactive) <-> conduit-peer(right,interactive)
-  left pull(accept-conflict)
-  right pull(accept-conflict), there should be no conflict
+    # right-to-left
+    left pull-report-conflict ))) right push-report-conflict
+    # left-to-right
+    right pull-report-conflict ))) left push-report-conflict
 
 conduit(left,non-interactive) <-> conduit-peer(right,non-interactive)
-  left pull
-  right pull
+    # right-to-left
+    left pull-reject-conflict ))) right push-reject-conflict
+    # left-to-right
+    right pull-reject-conflict ))) left push-reject-conflict
 
 conduit(left,interactive) <-> conduit-peer(right,non-interactive)
-  left pull(accept-conflict)
-  right pull
+    # right-to-left
+    left pull-report-conflict ))) right push-report-conflict
+    # left-to-right
+    right pull-reject-conflict ))) left push-reject-conflict
 
 conduit(left,non-interactive) <-> conduit-peer(right,interactive)
-  left pull
-  right pull(accept-conflict)
+    # right-to-left
+    left pull-reject-conflict ))) right push-reject-conflict
+    # left-to-right
+    right pull-report-conflict ))) left push-report-conflict
+
 
 
 conduit(left) --> external(right)
-  left copy-to
+    left push_overwrite_conflict ))) right pull_overwrite_conflict
 
 conduit(left) <-- external(right)
-  left copy-from
+    left pull_overwrite_conflict ))) right push_overwrite_conflict
 
 conduit(left,interactive) <-> external(right)
-  left pull(accept-conflict)
-  left push
+    # right-to-left
+    left pull-report-conflict ))) right push-report-conflict
+    # left-to-right
+    left push-reject-conflict ))) right pull-reject-conflict
 
 conduit(left,non-interactive) <-> external(right)
-  left pull
-  left push
+    # right-to-left
+    left pull-reject-conflict ))) right push-reject-conflict
+    # left-to-right
+    left push-reject-conflict ))) right pull-reject-conflict
 
 
 external(left,controllable) --> external(right)
-  left copy-to
+    left push_overwrite_conflict ))) right pull_overwrite_conflict
 
 external(left,controllable) <-- external(right)
-  left copy-from
+    left pull_overwrite_conflict ))) right push_overwrite_conflict
 
 external(left,controllable,interactive) <-> external(right)
-  left pull(accept-conflict)
-  left push
+    # right-to-left
+    left pull-report-conflict ))) right push-report-conflict
+    # left-to-right
+    left push-reject-conflict ))) right pull-reject-conflict
 
 external(left,controllable,non-interactive) <-> external(right)
-  left pull
-  left push
+    # right-to-left
+    left pull-reject-conflict ))) right push-reject-conflict
+    # left-to-right
+    left push-reject-conflict ))) right pull-reject-conflict
+
+
+rules: local/conduit first, pull first, left first
+))): do right operation if condition for left operation is not met
+
+
+
+
+
+not-through-conduit
+through-conduit
 
 
 
@@ -138,3 +225,39 @@ daemon is used to:
 2. advertise to mdns
 3. accept callback from cloud, if needed
 4. do upnp to open port for cloud-callback
+
+
+
+
+<data-provider>
+  <match-peer>
+    <my-peer-id>
+    <peer-id>
+    <auto>
+  <match-data-type>
+    <data-type>
+  <match-protocol>
+    <protocol>
+
+<supported-data-types>
+  <data-type>file</data-type>
+  <data-type>directory</data-type>
+  ...
+
+<supported-protocols>
+  <protocol>
+  ...
+
+<sync-direction>
+  <source>
+  <sink>
+  <twoway>
+
+<protocol>
+  <filename>
+  <classname>
+  <can-push>
+  <can-be-pushed-reject-conflic>
+  ...
+
+<data-type>

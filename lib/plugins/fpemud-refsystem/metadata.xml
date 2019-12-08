@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="fpemud-refsystem">
+  <data-provider id="fpemud-refsystem">
+    <filename>plugin.py</filename>
+    <classname>DataProvider</classname>
+    <sync-direction>
+        <source/>
+        <sink/>
+    </sync-direction>
+    <supported-protocols>
+        <protocol>fpemud-refsystem-protocol</protocol>
+    </supported-protocols>
+    <match-peer>
+        <my-peer-id/>
+        <auto/>
+    </match-peer>
+  </data-provider>
+  <protocol id="fpemud-refsystem-protocol">
+    <filename>plugin.py</filename>
+    <classname>Protocol</classname>
+    <can-push>false</can-push>
+    <can-be-pushed-reject-conflict>false</can-be-pushed-reject-conflict>
+    <can-be-pushed-report-conflict>false</can-be-pushed-report-conflict>
+    <can-be-pushed-overwrite-conflict>false</can-be-pushed-overwrite-conflict>
+    <can-pull-reject-conflict>false</can-pull-reject-conflict>
+    <can-pull-report-conflict>false</can-pull-report-conflict>
+    <can-pull-overwrite-conflict>true</can-pull-overwrite-conflict>
+    <can-be-pulled>true</can-be-pulled>
+  </protocol>
+</plugin>

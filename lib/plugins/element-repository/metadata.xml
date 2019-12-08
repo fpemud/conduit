@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="element-repository">
+  <data-provider id="element-repository">
+    <filename>plugin.py</filename>
+    <classname>DataProvider</classname>
+    <sync-direction>
+        <source/>
+        <sink/>
+        <twoway/>
+    </sync-direction>
+    <match-peer>
+        <my-peer-id/>
+        <auto/>
+    </match-peer>
+  </data-provider>
+</plugin>
