@@ -63,21 +63,30 @@ class TemplateDataProviderFactoryApi:
         assert False
 
 
-class TemplateData:
+class TemplateDataMergable:
 
     def __init__(self, init_param, api):
         assert False
 
     def get_checksum(self):
-        # optional
         assert False
 
     def get_delta(self, checksum):
-        # optional
         assert False
 
     def merge(self, delta):
-        # optional
+        assert False
+
+
+class TemplateDataCopyable:
+
+    def __init__(self, init_param, api):
+        assert False
+
+    def read(self):
+        assert False
+
+    def write(self, data):
         assert False
 
 

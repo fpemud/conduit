@@ -22,7 +22,8 @@ class ConduitProtocolGit:
         }
 
     def __init__(self, init_param, api):
-        assert False
+        self._path = init_param
+        self._api = api
 
     def start_accept_push_reject_conflict(self):
         # returns protocol_data

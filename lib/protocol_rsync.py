@@ -22,7 +22,9 @@ class ConduitProtocolRsync:
         }
 
     def __init__(self, init_param, api):
+        self._path = init_param
         self._api = api
+
         self._cfgFile = os.path.join(self._api.get_tmp_dir(), "rsync.cfg")
         self._lockFile = os.path.join(self._api.get_tmp_dir(), "rsync.lock")
         self._logFile = os.path.join(self._api.get_log_dir(), "rsync.log")
@@ -90,12 +92,8 @@ class ConduitProtocolRsync:
         buf += "uid = root\n"
         buf += "gid = root\n"
         buf += "\n"
-        buf += "[overlay]\n"
-        buf += "path = %s\n" % (self._overlayDir)
-        buf += "read only = yes\n"
-        buf += "\n"
-        buf += "[distfiles]\n"
-        buf += "path = %s\n" % (self._distfilesDir)
+        buf += "[data]\n"
+        buf += "path = %s\n" % (self._path)
         buf += "read only = yes\n"
         with open(self._cfgFile, "w") as f:
             f.write(buf)
