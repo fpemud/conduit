@@ -99,61 +99,70 @@ class TemplateDataApi:
         assert False
 
 
-class TemplateProtocol:
+class TemplatePushClient:
 
-    def __init__(self, init_param, api):
+    def push_reject_conflict(self, api):
         assert False
 
-    def start_accept_push_reject_conflict(self):
+    def push_report_conflict(self, api):
+        assert False
+
+    def push_overwrite_conflict(self, api):
+        assert False
+
+
+class TemplatePushServer:
+
+    def start_accept_push_reject_conflict(self, api):
         # returns protocol_data
         assert False
 
-    def start_accept_push_report_conflict(self):
+    def start_accept_push_report_conflict(self, api):
         # returns protocol_data
         assert False
 
-    def start_accept_push_overwrite_conflict(self):
+    def start_accept_push_overwrite_conflict(self, api):
         # returns protocol_data
         assert False
 
     def stop_accept_push(self):
         assert False
 
-    def start_accept_pull_reject_conflict(self):
+
+class TemplatePullClient:
+
+    def pull_reject_conflict(self, api):
+        assert False
+
+    def pull_report_conflict(self, api):
+        assert False
+
+    def pull_overwrite_conflict(self, api):
+        assert False
+
+
+class TemplatePullServer:
+
+    def start_accept_pull_reject_conflict(self, api):
         # returns protocol_data
         assert False
 
-    def start_accept_pull_report_conflict(self):
+    def start_accept_pull_report_conflict(self, api):
         # returns protocol_data
         assert False
 
-    def start_accept_pull_overwrite_conflict(self):
+    def start_accept_pull_overwrite_conflict(self, api):
         # returns protocol_data
         assert False
 
     def stop_accept_pull(self):
         assert False
 
-    def push_reject_conflict(self, peer_protocol_data):
-        assert False
-
-    def push_report_conflict(self, peer_protocol_data):
-        assert False
-
-    def push_overwrite_conflict(self, peer_protocol_data):
-        assert False
-
-    def pull_reject_conflict(self, peer_protocol_data):
-        assert False
-
-    def pull_report_conflict(self, peer_protocol_data):
-        assert False
-
-    def pull_overwrite_conflict(self, peer_protocol_data):
-        assert False
-
 
 class TemplateProtocolApi:
+
+    def get_init_data(self):
+        assert False
 
     def get_tmp_dir(self):
         assert False
@@ -163,6 +172,106 @@ class TemplateProtocolApi:
 
     def get_peer_ip(self):
         assert False
+
+
+class TemplatePushClientApi(TemplateProtocolApi):
+    
+    def get_server_ip(self):
+        assert False
+
+    def get_server_data(self):
+        assert False
+
+
+class TemplatePushServerApi(TemplateProtocolApi):
+
+    def get_client_ip(self):
+        assert False
+
+
+class TemplatePullClientApi(TemplateProtocolApi):
+
+    def get_server_ip(self):
+        assert False
+
+    def get_server_data(self):
+        assert False
+
+
+class TemplatePullServerApi(TemplateProtocolApi):
+
+    def get_client_ip(self):
+        assert False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class TemplateProtocol:
+
+#     def __init__(self, init_param, api):
+#         assert False
+
+#     def start_accept_push_reject_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def start_accept_push_report_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def start_accept_push_overwrite_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def stop_accept_push(self):
+#         assert False
+
+#     def start_accept_pull_reject_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def start_accept_pull_report_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def start_accept_pull_overwrite_conflict(self):
+#         # returns protocol_data
+#         assert False
+
+#     def stop_accept_pull(self):
+#         assert False
+
+#     def push_reject_conflict(self, peer_protocol_data):
+#         assert False
+
+#     def push_report_conflict(self, peer_protocol_data):
+#         assert False
+
+#     def push_overwrite_conflict(self, peer_protocol_data):
+#         assert False
+
+#     def pull_reject_conflict(self, peer_protocol_data):
+#         assert False
+
+#     def pull_report_conflict(self, peer_protocol_data):
+#         assert False
+
+#     def pull_overwrite_conflict(self, peer_protocol_data):
+#         assert False
 
 
 

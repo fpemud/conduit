@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="git-protocol">
+    <protocol id="git">
+        <pull-reject-conflict>true</pull-reject-conflict>
+        <pull-report-conflict>true</pull-report-conflict>
+        <pull-overwrite-conflict>true</pull-overwrite-conflict>
+        <push-reject-conflict>true</push-reject-conflict>
+        <push-report-conflict>false</push-report-conflict>
+        <push-overwrite-conflict>true</push-overwrite-conflict>
+    </protocol>
+    <puller id="git-puller" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>GitPuller</classname>
+    </puller>
+    <pullee id="git-pullee" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>GitPullee</classname>
+    </pullee>
+    <pusher id="git-pusher" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>GitPusher</classname>
+    </pusher>
+    <pushee id="git-pushee" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>GitPushee</classname>
+    </pushee>
+    <local-puller id="git-local-puller" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>LocalGitPuller</classname>
+    </local-puller>
+    <local-pusher id="git-local-pusher" protocol="git">
+        <filename>plugin.py</filename>
+        <classname>LocalGitPusher</classname>
+    </local-pusher>
+</plugin>

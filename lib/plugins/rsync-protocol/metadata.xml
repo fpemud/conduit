@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin id="rsync-protocol">
+    <protocol id="rsync">
+        <pull-reject-conflict>false</pull-reject-conflict>
+        <pull-report-conflict>false</pull-report-conflict>
+        <pull-overwrite-conflict>true</pull-overwrite-conflict>
+        <push-reject-conflict>false</push-reject-conflict>
+        <push-report-conflict>false</push-report-conflict>
+        <push-overwrite-conflict>true</push-overwrite-conflict>
+    </protocol>
+    <puller id="rsync-puller" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>RsyncPuller</classname>
+    </puller>
+    <pullee id="rsync-pullee" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>RsyncPullee</classname>
+    </pullee>
+    <pusher id="rsync-pusher" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>RsyncPusher</classname>
+    </pusher>
+    <pushee id="rsync-pushee" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>RsyncPushee</classname>
+    </pushee>
+    <local-puller id="rsync-local-puller" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>LocalRsyncPuller</classname>
+    </local-puller>
+    <local-pusher id="rsync-local-pusher" protocol="rsync">
+        <filename>plugin.py</filename>
+        <classname>LocalRsyncPusher</classname>
+    </local-pusher>
+</plugin>
