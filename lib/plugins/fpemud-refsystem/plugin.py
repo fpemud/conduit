@@ -10,10 +10,12 @@ import subprocess
 class DataProviderPrivateData:
 
     def __init__(self):
-        self._repoFile = "/etc/portage/repos.conf/overlay-fpemud-private.conf"
-        self._overlayDir = "/var/lib/portage/overlay-fpemud-private"
-        self._overlayRealDir = "/var/lib/portage/laymanfiles/fpemud-private"
-        self._distfilesDir = "/var/lib/portage/distfiles-private"
+        self._portageCfgDir = "/etc/portage"
+        self._makeConf = os.path.join(self._portageCfgDir, "make.conf")
+        self._portageDataDir = "/var/lib/portage"
+        self._overlayDir = os.path.join(self._portageDataDir, "overlay-fpemud-private")
+        self._overlayRealDir = os.path.join(self._portageDataDir, "laymanfiles", "fpemud-private")
+        self._distfilesDir = os.path.join(self._portageDataDir, "distfiles-private")
 
         self._api = None
         self._cfgFile = None
@@ -24,8 +26,34 @@ class DataProviderPrivateData:
 
     def activate(self, api):
         # check fpemud-refsystem
-        if not os.path.exists(os.path.dirname(self._overlayRealDir)):
+        if not os.path.exists(os.path.dirname(self._portageDataDir)):
             raise Exception("not fpemud-refsystem")
+
+        # create private overlay
+        if True:
+            # create real overlay directory
+            _Util.repoMkDir(self._overlayRealDir, "fpemud-overlay-private")
+
+            # create overlay directory
+            if not os.path.exists(self._overlayRealDir):
+                _Util.ensureDir(os.path.dirname(self._overlayDir))
+                _Util.shellCall("/bin/ln -sf laymanfiles/fpemud-private %s" % (self._overlayRealDir))
+
+            # create repo file
+            fullfn, buf = _Util.generateOverlayReposConfFile(self._portageCfgDir, "overlay-fpemud-private",
+                                                             self._overlayRealDir, "fpemud-overlay-private")
+            _Util.checkAndFixFile(fullfn, buf)
+
+        # create private distfiles directory
+        if True:
+            # create distfiles directory
+            _Util.ensureDir(self._distfilesDir)
+
+            # modify make.conf
+            dirList = _Util.getMakeConfVar(self._makeConf, "PORTAGE_RO_DISTDIRS").split(" "):
+            if self._distfilesDir not in dirList:
+                dirList.append(self._distfilesDir)
+                _Util.setMakeConfVar(self._makeConf, "PORTAGE_RO_DISTDIRS", " ".join(dirList))
 
     def deactivate(self):
         pass
@@ -135,6 +163,42 @@ class _Util:
             os.makedirs(dirname)
 
     @staticmethod
+    def repoMkDir(repoDir, repoName):
+        """Example: repoDir = /var/lib/portage/repo-fpemud-overlay
+                    repoName = repo-fpemud-overlay"""
+
+        assert not os.path.exists(repoDir)
+        os.mkdir(repoDir)
+        os.mkdir(os.path.join(repoDir, "metadata"))
+        with open(os.path.join(repoDir, "metadata", "layout.conf"), "w") as f:
+            f.write("masters = gentoo\n")
+            f.write("thin-manifests = true\n")
+        os.mkdir(os.path.join(repoDir, "profiles"))
+        with open(os.path.join(repoDir, "profiles", "repo_name"), "w") as f:
+            f.write(repoName)
+
+    @staticmethod
+    def generateOverlayReposConfFile(portageCfgReposDir, repoName, repoDir, innerRepoName):
+        buf = ""
+        buf += "[%s]\n" % (innerRepoName)
+        buf += "auto-sync = no\n"
+        buf += "priority = %d\n" % (5000)
+        buf += "location = %s\n" % (repoDir)
+
+        fullfn = os.path.join(portageCfgReposDir, "overlay-%s.conf" % (repoName))
+        return (fullfn, buf)
+
+    @staticmethod
+    def checkAndFixFile(filename, content):
+        if os.path.exists(filename):
+            with open(filename, "r") as f:
+                if f.read() == content:
+                    return
+
+        with open(filename, "w") as f:
+            f.write(content)
+
+    @staticmethod
     def getFreeTcpPort(start_port=10000, end_port=65536):
         for port in range(start_port, end_port):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -160,3 +224,54 @@ class _Util:
         if ret.returncode != 0:
             ret.check_returncode()
         return ret.stdout.rstrip()
+
+    @staticmethod
+    def getMakeConfVar(makeConfFile, varName):
+        """Returns variable value, returns "" when not found
+           Multiline variable definition is not supported yet"""
+
+        buf = ""
+        with open(makeConfFile, 'r') as f:
+            buf = f.read()
+
+        m = re.search("^%s=\"(.*)\"$" % (varName), buf, re.MULTILINE)
+        if m is None:
+            return ""
+        varVal = m.group(1)
+
+        while True:
+            m = re.search("\\${(\\S+)?}", varVal)
+            if m is None:
+                break
+            varName2 = m.group(1)
+            varVal2 = FmUtil.getMakeConfVar(makeConfFile, varName2)
+            if varVal2 is None:
+                varVal2 = ""
+
+            varVal = varVal.replace(m.group(0), varVal2)
+
+        return varVal
+
+    @staticmethod
+    def setMakeConfVar(makeConfFile, varName, varValue):
+        """Create or set variable in make.conf
+           Multiline variable definition is not supported yet"""
+
+        endEnter = False
+        buf = ""
+        with open(makeConfFile, 'r') as f:
+            buf = f.read()
+            if buf[-1] == "\n":
+                endEnter = True
+
+        m = re.search("^%s=\"(.*)\"$" % (varName), buf, re.MULTILINE)
+        if m is not None:
+            newLine = "%s=\"%s\"" % (varName, varValue)
+            buf = buf.replace(m.group(0), newLine)
+            with open(makeConfFile, 'w') as f:
+                f.write(buf)
+        else:
+            with open(makeConfFile, 'a') as f:
+                if not endEnter:
+                    f.write("\n")
+                f.write("%s=\"%s\"\n" % (varName, varValue))
