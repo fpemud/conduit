@@ -11,6 +11,8 @@ from gi.repository import GLib
 from c_util import CUtil
 from c_util import AvahiServiceRegister
 from c_param import CConst
+from builtin_datatypes import BuiltInDataTypes
+from builtin_protocols import BuiltInProtocols
 from c_common import CPluginManager
 from c_ctrl_server import CCtrlServer
 
@@ -48,11 +50,13 @@ class CDaemon:
                 logging.info('Certificate and private key generated.')
 
             # load built-in data-types
-            pass
+            self.param.dataTypeDict.update(BuiltInDataTypes.getDataTypeDict())
 
             # load built-in protocols
-            self.param.protocolDict[ConduitProtocolGit.get_id()] = ConduitProtocolGit
-            self.param.protocolDict[ConduitProtocolRsync.get_id()] = ConduitProtocolRsync
+            self.param.protocolDict.update(BuiltInProtocols.getProtocolDict())
+
+            # load plugins
+            CPluginManager(self.param).loadPlugins()
 
             # start control server
             self.ctrlServer = CCtrlServer(self.param)

@@ -173,6 +173,10 @@ class TemplateProtocolApi:
     def get_peer_ip(self):
         assert False
 
+    def accept_conflict(self):
+        assert False
+
+
 
 class TemplatePushClientApi(TemplateProtocolApi):
     
@@ -204,77 +208,10 @@ class TemplatePullServerApi(TemplateProtocolApi):
         assert False
 
 
+class TemplateDataType:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class TemplateProtocol:
-
-#     def __init__(self, init_param, api):
-#         assert False
-
-#     def start_accept_push_reject_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def start_accept_push_report_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def start_accept_push_overwrite_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def stop_accept_push(self):
-#         assert False
-
-#     def start_accept_pull_reject_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def start_accept_pull_report_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def start_accept_pull_overwrite_conflict(self):
-#         # returns protocol_data
-#         assert False
-
-#     def stop_accept_pull(self):
-#         assert False
-
-#     def push_reject_conflict(self, peer_protocol_data):
-#         assert False
-
-#     def push_report_conflict(self, peer_protocol_data):
-#         assert False
-
-#     def push_overwrite_conflict(self, peer_protocol_data):
-#         assert False
-
-#     def pull_reject_conflict(self, peer_protocol_data):
-#         assert False
-
-#     def pull_report_conflict(self, peer_protocol_data):
-#         assert False
-
-#     def pull_overwrite_conflict(self, peer_protocol_data):
-#         assert False
-
-
-
+    def check(self, param):
+        assert False
 
 
 
@@ -330,3 +267,6 @@ class DataDirectory:
 # interface for Data if the data is 
 class DataContainer:
     pass
+
+
+

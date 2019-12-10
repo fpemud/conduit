@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin id="element-repository">
-  <data-provider id="element-repository">
-    <filename>plugin.py</filename>
-    <classname>DataProvider</classname>
-    <roles>
-        <source/>
-        <sink/>
-        <twoway/>
-    </roles>
-    <data-names>
-        <data-name id="element-repository">Element Repository</data-name>
-        <directory>
-    </data-names>
-  </data-provider>
+    <data-provider id="element-repository">
+        <filename>plugin.py</filename>
+        <classname>DataProvider</classname>
+        <protocol>
+
+        </protocol>
+        <roles>
+            <source/>
+            <sink/>
+            <twoway/>
+        </roles>
+        <data-names>
+            <data-name id="element-repository">Element Repository</data-name>
+            <directory>
+        </data-names>
+    </data-provider>
 </plugin>

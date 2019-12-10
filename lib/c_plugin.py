@@ -7,6 +7,7 @@ import imp
 import libxml2
 import threading
 from gi.repository import GLib
+from c_param import CConst
 
 
 class CPluginManager:
@@ -15,7 +16,6 @@ class CPluginManager:
         self.param = param
 
     def loadPlugins(self):
-        ret = []
         for pluginName in os.listdir(CConst.pluginsDir):
             pluginPath = os.path.join(self.param.pluginsDir, pluginName)
             self._load(pluginName, pluginPath)
@@ -72,41 +72,45 @@ class CPluginManager:
             assert obj.id not in self.param.dataTypeDict
             self.param.dataTypeDict[obj.id] = obj
 
-
-
-
-
-
         # record plugin id
         self.param.pluginList.append(root.prop("id"))
 
+    def __loadDataProvider(self, pluginDir, rootElem):
+        obj = CDataProvider()
+        obj.id = rootElem.prop("id")
+        obj.roles = []
 
-class CDataProvider:
+        obj.Klass = None
+        if True:
+            filename = os.path.join(pluginDir, elem.xpathEval(".//filename")[0].getContent())
+            classname = elem.xpathEval(".//classname")[0].getContent()
+            try:
+                f = open(filename)
+                m = imp.load_module(filename[:-3], f, filename, ('.py', 'r', imp.PY_SOURCE))
+                obj.Klass = getattr(m, classname)
+            except:
+                raise Exception("syntax error")
 
-    def __init__(self, param, pluginDir, rootElem):
-        self.id = rootElem.prop("id")
+        <roles>
+            <source/>
+            <sink/>
+        </roles>
+        <data-types>
+            <data-type id="fpemud-refystem-private-data"/>
+        </data-types>
+        <protocols>
+            <protocol id="fpemud-refsystem-private-data-sync"/>
+        </protocols>
 
-        # data directory
-        self.dataDir = rootElem.xpathEval(".//data-directory")[0].getContent()
-        self.dataDir = os.path.join(param.cacheDir, self.dataDir)
+
+
+
 
         # updater
         self.updaterObj = None
         self.schedExpr = None
         self.useWorkerProc = None
         if True:
-            elem = rootElem.xpathEval(".//updater")[0]
-
-            self.schedExpr = elem.xpathEval(".//cron-expression")[0].getContent()
-            # FIXME: add check
-
-            ret = elem.xpathEval(".//runtime")
-            if len(ret) > 0:
-                self.runtime = ret[0].getContent()
-                # FIXME: add check
-            else:
-                self.runtime = "glib-mainloop"
-
             filename = os.path.join(pluginDir, elem.xpathEval(".//filename")[0].getContent())
             classname = elem.xpathEval(".//classname")[0].getContent()
             while True:

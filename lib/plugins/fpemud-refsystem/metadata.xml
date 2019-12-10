@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin id="fpemud-refsystem">
-  <data-provider id="fpemud-refsystem">
-    <filename>plugin.py</filename>
-    <classname>DataProvider</classname>
-    <roles>
-        <source/>
-        <sink/>
-    </roles>
-    <push-protocols>
-        <protocol>fpemud-refsystem-protocol</protocol>
-    </push-protocols>
-    <pull-protocols>
-        <protocol>fpemud-refsystem-protocol</protocol>
-    </pull-protocols>
-  </data-provider>
-  <protocol id="fpemud-refsystem-protocol">
-    <filename>plugin.py</filename>
-    <classname>Protocol</classname>
-    <can-push>false</can-push>
-    <can-be-pushed-reject-conflict>false</can-be-pushed-reject-conflict>
-    <can-be-pushed-report-conflict>false</can-be-pushed-report-conflict>
-    <can-be-pushed-overwrite-conflict>false</can-be-pushed-overwrite-conflict>
-    <can-pull-reject-conflict>false</can-pull-reject-conflict>
-    <can-pull-report-conflict>false</can-pull-report-conflict>
-    <can-pull-overwrite-conflict>true</can-pull-overwrite-conflict>
-    <can-be-pulled>true</can-be-pulled>
-  </protocol>
+    <data-type id="fpemud-refystem-private-data">
+        <name>fpemud's private system data</name>
+    </data-type>
+    <protocol id="fpemud-refsystem-private-data-sync">
+        <name>fpemud's private system data synchronization protocol</name>
+        <capabilities>
+            <get/>
+        </capabilities>
+    </protocol>
+    <data-provider id="fpemud-refsystem-private-data">
+        <filename>plugin.py</filename>
+        <classname>DataProviderPrivateData</classname>
+        <roles>
+            <source/>
+            <sink/>
+        </roles>
+        <data-types>
+            <data-type id="fpemud-refystem-private-data"/>
+        </data-types>
+        <protocols>
+            <protocol id="fpemud-refsystem-private-data-sync"/>
+        </protocols>
+    </data-provider>
 </plugin>

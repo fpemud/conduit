@@ -33,8 +33,10 @@ class CParam:
         self.pidFile = os.path.join(CConst.runDir, "conduit-daemon.pid")
         self.logLevel = None
 
+        self.dataTypeDict = dict()
+
+        self.protocolDict = dict()
+
         self.pluginList = []
         self.dataProviderDict = dict()
         self.dataProviderFactoryDict = dict()
-        self.dataTypeDict = dict()
-        self.protocolDict = dict()

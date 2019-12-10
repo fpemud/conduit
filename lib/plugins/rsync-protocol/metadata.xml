@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin id="rsync-protocol">
     <protocol id="rsync">
+        <pull>true</pull>
+        <get>true</get>
+        <push>true</push>
+        <put>true</put>
+
         <pull-reject-conflict>false</pull-reject-conflict>
         <pull-report-conflict>false</pull-report-conflict>
         <pull-overwrite-conflict>true</pull-overwrite-conflict>

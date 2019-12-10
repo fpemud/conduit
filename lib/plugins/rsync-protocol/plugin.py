@@ -6,14 +6,14 @@ import time
 import subprocess
 
 
-class ConduitRsyncPushClient:
+class RsyncPusher:
 
     def push_overwrite_conflict(self, api):
-        localDir = api.get_init_data()
+        localDir = api.get_my_data()
         logFile = os.path.join(api.get_log_dir(), "rsync-push.log")
-        port, dstName = api.get_server_data()
+        port, dstName = api.get_peer_data()
 
-        url = "rsync://%s:%d/%s" % (api.get_server_ip(), port, dstName)
+        url = "rsync://%s:%d/%s" % (api.get_peer_ip(), port, dstName)
         cmd = "/usr/bin/rsync -a -z --delete %s %s >%s 2>&1" % (localDir, url, logFile)
         _Util.shellCall(cmd)
 
